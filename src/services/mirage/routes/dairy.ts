@@ -34,3 +34,18 @@ export const create = (
     return handleErrors(error, 'Failed to create Diary.');
   }
 };
+
+export const updateDiary = (schema: any, req: Request): Diary | Response => {
+  try {
+    const diary = schema.diaries.find(req.params.id);
+    const data = JSON.parse(req.requestBody) as Partial<Diary>;
+    const now = dayjs().format();
+    diary.update({
+      ...data,
+      updateAt: now,
+    });
+    return diary.attrs as Diary;
+  } catch (error) {
+    return handleErrors(error, 'Failed to update Diary.');
+  }
+};
