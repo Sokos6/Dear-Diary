@@ -58,3 +58,30 @@ export const getDiaries = (schema: any, req: Request): Diary[] | Response => {
     return handleErrors(error, 'Could not get user diaries');
   }
 };
+
+export const addEntry = (
+  schema: any,
+  req: Request
+): { diary: Diary; entry: Entry } | Response => {
+  try {
+    const diary = schema.diaries.find(req.params.id);
+    const { title, content } = JSON.parse(req.requestBody) as Partial<Entry>;
+    const now = dayjs().format();
+    const entry = diary.createEntry({
+      title,
+      content,
+      createAt: now,
+      updateAt: now,
+    });
+    diary.update({
+      ...diary.attrs,
+      updateAt: now,
+    });
+    return {
+      diary: diary.attrs,
+      entry: entry.attrs,
+    };
+  } catch (error) {
+    return handleErrors(error, 'Failed to save entry.');
+  }
+};
