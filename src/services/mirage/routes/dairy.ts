@@ -49,3 +49,12 @@ export const updateDiary = (schema: any, req: Request): Diary | Response => {
     return handleErrors(error, 'Failed to update Diary.');
   }
 };
+
+export const getDiaries = (schema: any, req: Request): Diary[] | Response => {
+  try {
+    const user = schema.users.find(req.params.id);
+    return user.diary as Diary[];
+  } catch (error) {
+    return handleErrors(error, 'Could not get user diaries');
+  }
+};
