@@ -42,7 +42,7 @@ export const updateDiary = (schema: any, req: Request): Diary | Response => {
     const now = dayjs().format();
     diary.update({
       ...data,
-      updateAt: now,
+      updatedAt: now,
     });
     return diary.attrs as Diary;
   } catch (error) {
@@ -55,7 +55,7 @@ export const getDiaries = (schema: any, req: Request): Diary[] | Response => {
     const user = schema.users.find(req.params.id);
     return user.diary as Diary[];
   } catch (error) {
-    return handleErrors(error, 'Could not get user diaries');
+    return handleErrors(error, 'Could not get user diaries.');
   }
 };
 
@@ -70,12 +70,12 @@ export const addEntry = (
     const entry = diary.createEntry({
       title,
       content,
-      createAt: now,
-      updateAt: now,
+      createdAt: now,
+      updatedAt: now,
     });
     diary.update({
       ...diary.attrs,
-      updateAt: now,
+      updatedAt: now,
     });
     return {
       diary: diary.attrs,
@@ -86,7 +86,7 @@ export const addEntry = (
   }
 };
 
-const getEntries = (
+export const getEntries = (
   schema: any,
   req: Request
 ): { entries: Entry[] } | Response => {
@@ -94,7 +94,7 @@ const getEntries = (
     const diary = schema.diaries.find(req.params.id);
     return diary.entry;
   } catch (error) {
-    return handleErrors(error, 'Failed to get Diary entries');
+    return handleErrors(error, 'Failed to get Diary entries.');
   }
 };
 
